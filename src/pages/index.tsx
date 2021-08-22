@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import TaskList from './TaskList';
+import TaskList from '../components/TaskList';
 import axios from 'axios';
 import { TaskItemStruct, TaskFilterStruct, PostTaskReadStruct } from '../_types';
 import { styleSceneTodoApp } from '../_styles';

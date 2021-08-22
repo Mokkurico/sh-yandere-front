@@ -1,7 +1,7 @@
 import {
-  TaskItemStruct,
-  TaskFilterStruct,
   PostTaskUpdateStruct,
+  TaskFilterStruct,
+  TaskItemStruct,
   TaskStatusStruct,
 } from '../_types';
 import TaskItem from './TaskItem';
@@ -9,6 +9,7 @@ import TaskAdder from './TaskAdder';
 import { tmpUserId } from '../_constParams';
 import axios from 'axios';
 import { useState } from 'react';
+import useRequest from '../libs/request';
 
 type Props = {
   tasks: TaskItemStruct[];
@@ -19,6 +20,11 @@ type Props = {
 
 const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter }) => {
   const [postResult, setPostResult] = useState();
+  const user_id = 'example-user-id';
+  const { data } = useRequest<TaskItemStruct[]>({
+    url: '/api/data',
+    params: { user_id },
+  });
 
   const FilteredTasks = tasks.filter((task) => {
     switch (taskFilter) {
@@ -156,7 +162,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
       .post('http://localhost:8080/task/create', requestOptions)
       .then((response) => {
         console.log(response.data.result);
-        setPostResult(response.data.result);
+        setPostResult(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -182,19 +188,21 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
         <TaskAdder tasks={tasks} setTasks={setTasks} />
       )}
       <ul style={{ listStyle: 'none' }}>
-        {FilteredTasks.map((task) => {
-          return (
-            <li key={task.id}>
-              <TaskItem
-                task={task}
-                onTaskFinish={onTaskFinish}
-                onTaskRename={onTaskRename}
-                onTaskRemove={onTaskRemove}
-                onTaskRemovePerm={onTaskRemovePerm}
-              />
-            </li>
-          );
-        })}
+        {data
+          ? data.map((task) => {
+              return (
+                <li key={task.id}>
+                  <TaskItem
+                    task={task}
+                    onTaskFinish={onTaskFinish}
+                    onTaskRename={onTaskRename}
+                    onTaskRemove={onTaskRemove}
+                    onTaskRemovePerm={onTaskRemovePerm}
+                  />
+                </li>
+              );
+            })
+          : 'loading...'}
       </ul>
     </>
   );

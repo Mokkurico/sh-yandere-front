@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 type Props = {
-  compo: React.FunctionComponent;
+  onClick: () => void;
   text: string;
 };
 
-const ButtonCallCompo: React.FC<Props> = ({ compo, text }) => {
-  const [show, setShow] = useState(null);
-
-  const handleClick = () => {
-    if (compo !== null) setShow(compo);
-  };
+const ButtonCallCompo: React.FC<Props> = ({ onClick, text }) => {
+  onClick();
 
   return (
     <>
-      <button onClick={() => handleClick()}>{text}</button>
-      <div>{show}</div>
+      <button>{text}</button>
     </>
   );
 };

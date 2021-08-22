@@ -1,5 +1,7 @@
 import React from 'react';
-import { TaskItemStruct, TaskStatusStruct } from '../_types';
+import { TaskItemStruct, TaskStatusStruct } from '../params/_types';
+import TaskDetailModal from './TaskDetailModal';
+import ButtonCallCompo from './ButtonCallCompo';
 
 type Props = {
   task: TaskItemStruct;
@@ -18,6 +20,16 @@ const TaskItem: React.FC<Props> = ({
 }) => {
   return (
     <>
+      {/* これをクリックすると、詳細モーダル表示 */}
+      {/**
+       * 下のボタンコンポーネントにて、他のコンポーネントを呼び出す
+       * …としたいのだが、
+       * React.FCの使用上、下の呼び出し方はできない模様。
+       * 何かしらの方法を用いて、コンポーネント、
+       * 及びコンポーネントに変わるデーター群を渡したい。
+       */}
+      <ButtonCallCompo compo={TaskDetailModal({ task: task })} text="詳細" />
+
       <input
         type="checkbox"
         checked={task.is_done}

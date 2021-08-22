@@ -3,10 +3,10 @@ import {
   TaskFilterStruct,
   PostTaskUpdateStruct,
   TaskStatusStruct,
-} from '../_types';
+} from '../params/_types';
 import TaskItem from './TaskItem';
 import TaskAdder from './TaskAdder';
-import { tmpUserId } from '../_constParams';
+import { tmpUserId } from '../params/_constParams';
 import axios from 'axios';
 import { useState } from 'react';
 

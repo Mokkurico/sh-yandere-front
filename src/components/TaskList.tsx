@@ -40,12 +40,15 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
   });
 
   const onTaskFinish = (task_id: string, is_finished: boolean) => {
-    const newTask = tasks.map((task) => {
-      if (task.id === task_id) {
+    const newTask = data.map((task) => {
+      console.log(task.task_id);
+      if (task.task_id === task_id) {
+        console.log(task);
+
         const postData: PostTaskUpdateStruct = {
-          task_id: task.id,
+          task_id: task.task_id,
           name: task.name,
-          description: task.description,
+          desc: task.desc,
           is_done: !is_finished,
           user_id: tmpUserId,
           status: 'exist',
@@ -63,12 +66,12 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
   };
 
   const onTaskRename = (task_id: string, name: string) => {
-    const newTask = tasks.map((task) => {
-      if (task.id === task_id) {
+    const newTask = data.map((task) => {
+      if (task.task_id === task_id) {
         const postData: PostTaskUpdateStruct = {
-          task_id: task.id,
+          task_id: task.task_id,
           name: name,
-          description: task.description,
+          desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
           status: 'exist',
@@ -86,14 +89,14 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
 
   const onTaskRemove = (task_id: string, status: TaskStatusStruct) => {
     const newTask = tasks.map((task) => {
-      if (task.id === task_id) {
+      if (task.task_id === task_id) {
         if (task.status === 'exist') status = 'remove';
         else status = 'exist';
 
         const postData: PostTaskUpdateStruct = {
-          task_id: task.id,
+          task_id: task.task_id,
           name: task.name,
-          description: task.description,
+          desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
           status: status,
@@ -112,11 +115,11 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
 
   const onTaskRemovePerm = (task_id: string) => {
     tasks.map((task) => {
-      if (task.id === task_id) {
+      if (task.task_id === task_id) {
         const postData: PostTaskUpdateStruct = {
-          task_id: task.id,
+          task_id: task.task_id,
           name: task.name,
-          description: task.description,
+          desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
           status: 'eliminated',
@@ -126,7 +129,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
         if (postResult === false) return;
       }
     });
-    const newTasks = tasks.filter((task) => task.id !== task_id);
+    const newTasks = tasks.filter((task) => task.task_id !== task_id);
     setTasks(newTasks);
   };
 
@@ -134,9 +137,9 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     tasks.map((task) => {
       if (task.status === 'remove') {
         const postData: PostTaskUpdateStruct = {
-          task_id: task.id,
+          task_id: task.task_id,
           name: task.name,
-          description: task.description,
+          desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
           status: 'eliminated',
@@ -152,14 +155,14 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
 
   const AxiosUpdateTask = (postData: PostTaskUpdateStruct) => {
     let result: boolean;
-
+    console.log(postData);
     const requestOptions = {
       data: postData,
       headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
     };
 
     axios
-      .post('http://localhost:8080/task/create', requestOptions)
+      .post('http://localhost:8080/task/create', data)
       .then((response) => {
         console.log(response.data.result);
         setPostResult(response.data);
@@ -191,7 +194,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
         {data
           ? data.map((task) => {
               return (
-                <li key={task.id}>
+                <li key={task.task_id}>
                   <TaskItem
                     task={task}
                     onTaskFinish={onTaskFinish}

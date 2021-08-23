@@ -40,7 +40,7 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
       });
 
     const newTask: TaskItemStruct = {
-      id: taskId,
+      task_id: taskId,
       name: inputName,
       description: inputDesc,
       is_done: false,

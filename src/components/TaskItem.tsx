@@ -22,18 +22,18 @@ const TaskItem: React.FC<Props> = ({
         type="checkbox"
         checked={task.is_done}
         disabled={task.status === 'remove'}
-        onChange={() => onTaskFinish(task.id, task.is_done)}
+        onChange={() => onTaskFinish(task.task_id, task.is_done)}
       />
       <input
         type="text"
         value={task.name}
         disabled={task.is_done || task.status === 'remove'}
-        onChange={(e) => onTaskRename(task.id, e.target.value)}
+        onChange={(e) => onTaskRename(task.task_id, e.target.value)}
       />
-      <button onClick={() => onTaskRemove(task.id, task.status)}>
+      <button onClick={() => onTaskRemove(task.task_id, task.status)}>
         {task.status === 'remove' ? '復元' : '削除'}
       </button>
-      <button hidden={task.status === 'remove'} onClick={() => onTaskRemovePerm(task.id)}>
+      <button hidden={task.status === 'remove'} onClick={() => onTaskRemovePerm(task.task_id)}>
         抹消
       </button>
     </>

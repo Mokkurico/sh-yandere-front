@@ -1,7 +1,7 @@
 export type TaskItemStruct = {
-  id: string;
+  task_id: string;
   name: string;
-  description: string;
+  desc: string;
   is_done: boolean;
   status: TaskStatusStruct;
 };
@@ -10,7 +10,7 @@ export type TaskFilterStruct = 'unfinished' | 'finished' | 'all' | 'removed';
 
 export type PostTaskCreateStruct = {
   name: string;
-  description: string;
+  desc: string;
   is_done: boolean;
   user_id: string;
   status: TaskStatusStruct;
@@ -19,7 +19,7 @@ export type PostTaskCreateStruct = {
 export type PostTaskUpdateStruct = {
   task_id: string;
   name: string;
-  description: string;
+  desc: string;
   is_done: boolean;
   user_id: string;
   status: TaskStatusStruct;

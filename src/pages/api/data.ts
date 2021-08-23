@@ -18,7 +18,8 @@ export default (req, res) => {
       .then((resp) => resp.data)
       .then((data) => {
         setTimeout(() => {
-          console.log(data);
+          // console.log(data);
+          console.log("Called")
           res.json(data);
           res.end();
         }, 2000);

@@ -61,9 +61,9 @@ const App: NextPage = () => {
       taskDataReaded.map((elem) => {
         if (elem.status !== 'eliminated') {
           const newTask: TaskItemStruct = {
-            id: elem.task_id,
+            task_id: elem.task_id,
             name: elem.name,
-            description: elem.description,
+            desc: elem.description,
             is_done: elem.is_done,
             status: elem.status,
           };

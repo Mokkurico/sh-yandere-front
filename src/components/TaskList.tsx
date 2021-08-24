@@ -1,4 +1,5 @@
 import {
+  mapStatusToCode,
   PostTaskUpdateStruct,
   TaskFilterStruct,
   TaskItemStruct,
@@ -26,18 +27,20 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     params: { user_id },
   });
 
-  const FilteredTasks = tasks.filter((task) => {
-    switch (taskFilter) {
-      case 'unfinished':
-        return !task.is_done && task.status === 'exist';
-      case 'finished':
-        return task.is_done && task.status === 'exist';
-      case 'all':
-        return task.status === 'exist';
-      case 'removed':
-        return task.status === 'remove';
-    }
-  });
+  const FilteredTasks = data
+    ? data.filter((task) => {
+        switch (taskFilter) {
+          case 'unfinished':
+            return !task.is_done && task.status === 'exist';
+          case 'finished':
+            return task.is_done && task.status === 'exist';
+          case 'all':
+            return task.status === 'exist';
+          case 'removed':
+            return task.status === 'remove';
+        }
+      })
+    : [];
 
   const onTaskFinish = (task_id: string, is_finished: boolean) => {
     const newTask = data.map((task) => {
@@ -51,7 +54,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           desc: task.desc,
           is_done: !is_finished,
           user_id: tmpUserId,
-          status: 'exist',
+          status: mapStatusToCode('exist'),
         };
 
         AxiosUpdateTask(postData);
@@ -74,7 +77,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
-          status: 'exist',
+          status: mapStatusToCode('exist'),
         };
 
         AxiosUpdateTask(postData);
@@ -88,10 +91,10 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
   };
 
   const onTaskRemove = (task_id: string, status: TaskStatusStruct) => {
-    const newTask = tasks.map((task) => {
+    const newTask = data.map((task) => {
       if (task.task_id === task_id) {
-        if (task.status === 'exist') status = 'remove';
-        else status = 'exist';
+        status = 'remove';
+        // else status = 'exist';
 
         const postData: PostTaskUpdateStruct = {
           task_id: task.task_id,
@@ -99,7 +102,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
-          status: status,
+          status: mapStatusToCode(status),
         };
 
         AxiosUpdateTask(postData);
@@ -109,12 +112,12 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
       }
       return task;
     });
-
-    setTasks(newTask);
+    console.log(newTask.filter((task) => task.status !== 'remove'));
+    setTasks(newTask.filter((task) => task.status !== 'remove'));
   };
 
   const onTaskRemovePerm = (task_id: string) => {
-    tasks.map((task) => {
+    data.map((task) => {
       if (task.task_id === task_id) {
         const postData: PostTaskUpdateStruct = {
           task_id: task.task_id,
@@ -122,19 +125,19 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
-          status: 'eliminated',
+          status: mapStatusToCode('eliminated'),
         };
 
         AxiosUpdateTask(postData);
         if (postResult === false) return;
       }
     });
-    const newTasks = tasks.filter((task) => task.task_id !== task_id);
+    const newTasks = data.filter((task) => task.task_id !== task_id);
     setTasks(newTasks);
   };
 
   const onTaskRemovePermAll = () => {
-    tasks.map((task) => {
+    data.map((task) => {
       if (task.status === 'remove') {
         const postData: PostTaskUpdateStruct = {
           task_id: task.task_id,
@@ -142,27 +145,27 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           desc: task.desc,
           is_done: task.is_done,
           user_id: tmpUserId,
-          status: 'eliminated',
+          status: mapStatusToCode('eliminated'),
         };
-
+        console.log(postData);
         AxiosUpdateTask(postData);
         if (postResult === false) return;
       }
     });
-    const newTasks = tasks.filter((task) => task.status === 'exist');
+    const newTasks = data.filter((task) => task.status === 'exist');
     setTasks(newTasks);
   };
 
   const AxiosUpdateTask = (postData: PostTaskUpdateStruct) => {
     let result: boolean;
-    console.log(postData);
+
     const requestOptions = {
       data: postData,
       headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
     };
 
     axios
-      .post('http://localhost:8080/task/create', data)
+      .post('http://localhost:8080/task/create', postData)
       .then((response) => {
         console.log(response.data.result);
         setPostResult(response.data);
@@ -188,23 +191,25 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
       {taskFilter === 'removed' ? (
         <button onClick={() => onTaskRemovePermAll()}>全て抹消</button>
       ) : (
-        <TaskAdder tasks={tasks} setTasks={setTasks} />
+        <TaskAdder tasks={data} setTasks={setTasks} />
       )}
       <ul style={{ listStyle: 'none' }}>
         {data
-          ? data.map((task) => {
-              return (
-                <li key={task.task_id}>
-                  <TaskItem
-                    task={task}
-                    onTaskFinish={onTaskFinish}
-                    onTaskRename={onTaskRename}
-                    onTaskRemove={onTaskRemove}
-                    onTaskRemovePerm={onTaskRemovePerm}
-                  />
-                </li>
-              );
-            })
+          ? data
+              .filter((task) => task.status === 'exist')
+              .map((task) => {
+                return (
+                  <li key={task.task_id}>
+                    <TaskItem
+                      task={task}
+                      onTaskFinish={onTaskFinish}
+                      onTaskRename={onTaskRename}
+                      onTaskRemove={onTaskRemove}
+                      onTaskRemovePerm={onTaskRemovePerm}
+                    />
+                  </li>
+                );
+              })
           : 'loading...'}
       </ul>
     </>

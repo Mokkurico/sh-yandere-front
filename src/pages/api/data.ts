@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PostTaskReadStruct } from '../../_types';
+import { mapStatusCodeToStatus, PostTaskReadStruct } from '../../_types';
 
 export default (req, res) => {
   if (req.query.user_id) {
@@ -19,8 +19,15 @@ export default (req, res) => {
       .then((data) => {
         setTimeout(() => {
           // console.log(data);
-          console.log("Called")
-          res.json(data);
+          console.log('Called');
+          res.json(
+            data.map((item) => {
+              console.log(item);
+              item.status = mapStatusCodeToStatus(item.status);
+              return item;
+            })
+          );
+
           res.end();
         }, 2000);
       })

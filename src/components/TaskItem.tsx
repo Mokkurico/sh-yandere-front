@@ -1,6 +1,6 @@
 import React from 'react';
 import { TaskItemStruct, TaskStatusStruct } from '../params/_types';
-import ButtonCallCompo from './ButtonCallCompo';
+import { AddButton } from './AddButton';
 
 type Props = {
   task: TaskItemStruct;
@@ -17,6 +17,11 @@ const TaskItem: React.FC<Props> = ({
   onTaskRemove,
   onTaskRemovePerm,
 }) => {
+  // AddButtonの動作テスト用
+  const kari = () => {
+    console.log('test');
+  };
+
   return (
     <>
       {/**
@@ -24,7 +29,7 @@ const TaskItem: React.FC<Props> = ({
        * HTMLが返せない？っぽいので、モーダルに乗せる予定の
        * ボタン試しおきができていない。
        */}
-      <ButtonCallCompo onClick={/* ここに詳細表示メソッド */} text="詳細" />
+      <AddButton onClick={kari} />
 
       <input
         type="checkbox"

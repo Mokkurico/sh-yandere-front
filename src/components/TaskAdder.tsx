@@ -50,8 +50,8 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
     console.log(newTask);
 
     setTasks([newTask, ...tasks]);
-    setInputName('');
-    setInputDesc('');
+    // setInputName('');
+    // setInputDesc('');
   };
 
   return (

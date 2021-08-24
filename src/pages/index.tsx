@@ -3,7 +3,12 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import TaskList from '../components/TaskList';
 import axios from 'axios';
-import { PostTaskReadStruct, TaskFilterStruct, TaskItemStruct } from '../_types';
+import {
+  mapStatusCodeToStatus,
+  PostTaskReadStruct,
+  TaskFilterStruct,
+  TaskItemStruct,
+} from '../_types';
 import { styleSceneTodoApp } from '../_styles';
 import { tmpUserId } from '../_constParams';
 import Modal from 'react-modal';
@@ -48,7 +53,13 @@ const App: NextPage = () => {
     axios
       .post('http://localhost:8080/task/read', requestOptions)
       .then((response) => {
-        setTaskDataReaded(response.data);
+        setTasks(
+          response.data.map((item) => {
+            console.log(item);
+            item.status = mapStatusCodeToStatus(item.status);
+            return item;
+          })
+        );
         console.log(taskDataReaded);
         setTaskList();
       })

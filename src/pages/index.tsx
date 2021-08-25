@@ -6,6 +6,7 @@ import axios from 'axios';
 import { TaskItemStruct, TaskFilterStruct, PostTaskReadStruct } from '../params/_types';
 import { styleSceneTodoApp } from '../params/_styles';
 import { tmpUserId } from '../params/_constParams';
+import AddButton from '../components/AddButton';
 
 const App: NextPage = () => {
   const styles = styleSceneTodoApp();
@@ -53,6 +54,11 @@ const App: NextPage = () => {
     };
   };
 
+  // AddButtonの動作テスト用
+  const kari = () => {
+    console.log('test');
+  };
+
   return (
     <>
       <Head>
@@ -62,23 +68,25 @@ const App: NextPage = () => {
       </Head>
       <div className={styles.Background}>
         <button onClick={() => onTaskRead(tmpUserId)}>取得</button>
-        {/*
-          <Grid justifyContent="flex-start" alignContent="flex-start" direction="column">
-            <Tooltip title="Add" aria-label="add">
-              <Fab>
-                <Add />
-              </Fab>
-            </Tooltip>
-          </Grid>
-          <Grid justifyContent="center" alignContent="center">
-          */}
+        {/**
+         * 単純なconsole.logの文字列渡しまでは動作を確認できたが、
+         * HTMLが返せない？っぽいので、モーダルに乗せる予定の
+         * ボタン試しおきができていない。
+         */}
+        <AddButton onClick={kari} />
+
+        {/* 見た目チェック用 */}
+        <a href="/addTaskForm">追加モーダル</a>
+
+        {/* 見た目チェック用 */}
+        <a href="/taskDetailForm">詳細モーダル</a>
+
         <TaskList
           tasks={tasks}
           setTasks={setTasks}
           taskFilter={taskFilter}
           setTaskFilter={setTaskFilter}
         />
-        {/*</Grid>*/}
       </div>
     </>
   );

@@ -1,6 +1,5 @@
 import React from 'react';
 import { TaskItemStruct, TaskStatusStruct } from '../params/_types';
-import { AddButton } from './AddButton';
 
 type Props = {
   task: TaskItemStruct;
@@ -17,20 +16,8 @@ const TaskItem: React.FC<Props> = ({
   onTaskRemove,
   onTaskRemovePerm,
 }) => {
-  // AddButtonの動作テスト用
-  const kari = () => {
-    console.log('test');
-  };
-
   return (
     <>
-      {/**
-       * 単純なconsole.logの文字列渡しまでは動作を確認できたが、
-       * HTMLが返せない？っぽいので、モーダルに乗せる予定の
-       * ボタン試しおきができていない。
-       */}
-      <AddButton onClick={kari} />
-
       <input
         type="checkbox"
         checked={task.is_done}

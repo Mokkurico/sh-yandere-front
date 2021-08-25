@@ -8,19 +8,3 @@ export const styleSceneTodoApp = makeStyles({
     position: 'relative',
   },
 });
-
-export const styleCircleButton = makeStyles({
-  AddButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    fontSize: '32px',
-
-    width: '64px',
-    height: '64px',
-    borderRadius: '32px',
-
-    border: 'none',
-  },
-});

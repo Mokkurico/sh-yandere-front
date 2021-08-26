@@ -1,7 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { mapStatusCodeToStatus, mapStatusToCode, PostTaskCreateStruct, TaskItemStruct } from '../_types';
-import { tmpUserId } from '../_constParams';
+import {
+  mapStatusCodeToStatus,
+  mapStatusToCode,
+  PostTaskCreateStruct,
+  TaskItemStruct,
+} from '../params/_types';
+import { tmpUserId } from '../params/_constParams';
 
 type Props = {
   tasks: TaskItemStruct[];

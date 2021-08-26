@@ -8,10 +8,10 @@ import {
   PostTaskReadStruct,
   TaskFilterStruct,
   TaskItemStruct,
-} from '../_types';
-import { styleSceneTodoApp } from '../_styles';
-import { tmpUserId } from '../_constParams';
+} from '../params/_types';
+import { tmpUserId } from '../params/_constParams';
 import Modal from 'react-modal';
+import AddButton from '../components/AddButton';
 
 // スタイリング
 const customStyles = {
@@ -34,9 +34,6 @@ const customStyles = {
   },
 };
 const App: NextPage = () => {
-  const styles = styleSceneTodoApp();
-
-  const [taskDataReaded, setTaskDataReaded] = useState([]);
   const [tasks, setTasks] = useState<TaskItemStruct[]>([]);
   const [taskFilter, setTaskFilter] = useState<TaskFilterStruct>('unfinished');
 
@@ -60,29 +57,10 @@ const App: NextPage = () => {
             return item;
           })
         );
-        console.log(taskDataReaded);
-        setTaskList();
       })
       .catch((error) => {
         console.log(error);
       });
-
-    const setTaskList = () => {
-      //const filtered = taskDataReaded.filter((data) => data.status !== 'eliminated');
-      taskDataReaded.map((elem) => {
-        if (elem.status !== 'eliminated') {
-          const newTask: TaskItemStruct = {
-            task_id: elem.task_id,
-            name: elem.name,
-            desc: elem.description,
-            is_done: elem.is_done,
-            status: elem.status,
-          };
-          console.log(newTask);
-          setTasks([newTask, ...tasks]);
-        }
-      });
-    };
   };
 
   // アプリのルートを識別するクエリセレクタを指定する。
@@ -111,25 +89,36 @@ const App: NextPage = () => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
       </Head>
-      <div className={styles.Background}>
+      <div className="background">
+        <style jsx>{`
+          .background {
+            background-color: #ffc9ff;
+            width: 100%;
+            min-height: 100vh;
+            position: fixed;
+          }
+        `}</style>
+
         <button onClick={() => onTaskRead(tmpUserId)}>取得</button>
-        {/*
-          <Grid justifyContent="flex-start" alignContent="flex-start" direction="column">
-            <Tooltip title="Add" aria-label="add">
-              <Fab>
-                <Add />
-              </Fab>
-            </Tooltip>
-          </Grid>
-          <Grid justifyContent="center" alignContent="center">
-          */}
+        {/**
+         * 単純なconsole.logの文字列渡しまでは動作を確認できたが、
+         * HTMLが返せない？っぽいので、モーダルに乗せる予定の
+         * ボタン試しおきができていない。
+         */}
+        <AddButton onClick={openModal} />
+
+        {/* 見た目チェック用 */}
+        <a href="/addTaskForm">追加モーダル</a>
+
+        {/* 見た目チェック用 */}
+        <a href="/taskDetailForm">詳細モーダル</a>
+
         <TaskList
           tasks={tasks}
           setTasks={setTasks}
           taskFilter={taskFilter}
           setTaskFilter={setTaskFilter}
         />
-        {/*</Grid>*/}
       </div>
       <button onClick={openModal}>Open Modal</button>
       <Modal

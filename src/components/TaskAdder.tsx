@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { PostTaskCreateStruct, TaskItemStruct } from '../_types';
+import { mapStatusCodeToStatus, mapStatusToCode, PostTaskCreateStruct, TaskItemStruct } from '../_types';
 import { tmpUserId } from '../_constParams';
 
 type Props = {
@@ -19,10 +19,10 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
 
     const postData: PostTaskCreateStruct = {
       name: inputName,
-      description: inputDesc,
+      desc: inputDesc,
       is_done: false,
       user_id: tmpUserId,
-      status: 'exist',
+      status: mapStatusToCode('exist'),
     };
 
     const requestOptions = {
@@ -40,18 +40,18 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
       });
 
     const newTask: TaskItemStruct = {
-      id: taskId,
+      task_id: taskId,
       name: inputName,
-      description: inputDesc,
+      desc: inputDesc,
       is_done: false,
-      status: postData.status,
+      status: mapStatusCodeToStatus(postData.status),
     };
 
     console.log(newTask);
 
     setTasks([newTask, ...tasks]);
-    setInputName('');
-    setInputDesc('');
+    // setInputName('');
+    // setInputDesc('');
   };
 
   return (

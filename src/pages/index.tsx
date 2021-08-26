@@ -4,13 +4,10 @@ import React, { useState } from 'react';
 import TaskList from '../components/TaskList';
 import axios from 'axios';
 import { TaskItemStruct, TaskFilterStruct, PostTaskReadStruct } from '../params/_types';
-import { styleSceneTodoApp } from '../params/_styles';
 import { tmpUserId } from '../params/_constParams';
 import AddButton from '../components/AddButton';
 
 const App: NextPage = () => {
-  const styles = styleSceneTodoApp();
-
   const [taskDataReaded, setTaskDataReaded] = useState([]);
   const [tasks, setTasks] = useState<TaskItemStruct[]>([]);
   const [taskFilter, setTaskFilter] = useState<TaskFilterStruct>('unfinished');
@@ -66,7 +63,16 @@ const App: NextPage = () => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
       </Head>
-      <div className={styles.Background}>
+      <div className="background">
+        <style jsx>{`
+          .background {
+            background-color: #ffc9ff;
+            width: 100%;
+            min-height: 100vh;
+            position: fixed;
+          }
+        `}</style>
+
         <button onClick={() => onTaskRead(tmpUserId)}>取得</button>
         {/**
          * 単純なconsole.logの文字列渡しまでは動作を確認できたが、
